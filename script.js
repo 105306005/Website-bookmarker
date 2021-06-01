@@ -32,9 +32,6 @@ function validate(nameValue, urlValue) {
     alert("Please submit values for both fields!");
     return false;
   }
-  // if (urlValue.match(regex)) {
-  //   alert("match");
-  // }
   if (!urlValue.match(regex)) {
     alert("Please provide a valide web address");
     return false;
@@ -45,6 +42,8 @@ function validate(nameValue, urlValue) {
 
 // Build Bookmarks DOM
 function buildBookmarks() {
+  //Remove all Bookmarks elements
+  bookmarksContainer.textContent = "";
   //Build item
   bookmarks.forEach((bookmark) => {
     const { name, url } = bookmark;
@@ -91,10 +90,30 @@ function fetchBookmarks() {
         name: "youtube",
         url: "https://youtube.com",
       },
+      {
+        name: "google",
+        url: "https://google.com",
+      },
+      {
+        name: "MDN Web Docs",
+        url: "https://developer.mozilla.org/zh-CN/",
+      },
     ];
     localStorage.setItem("bookmarks", JSON.stringify(bookmarks));
   }
   buildBookmarks();
+}
+
+// Delete Bookmark
+function deleteBookmark(url) {
+  bookmarks.forEach((bookmark, i) => {
+    if (bookmark.url === url) {
+      bookmarks.splice(i, 1);
+    }
+  });
+  //update bookmarks array in local storage & re-populate DOM
+  localStorage.setItem("bookmarks", JSON.stringify(bookmarks));
+  fetchBookmarks();
 }
 
 //Handle data from Form
@@ -102,7 +121,7 @@ function storeBookmark(e) {
   e.preventDefault();
   const nameValue = websiteNameEl.value;
   let urlValue = websiteUrlEl.value;
-  if (!urlValue.includes("http://", "https://")) {
+  if (!urlValue.includes("https://") && !urlValue.includes("http://")) {
     urlValue = `https://${urlValue}`;
   }
   if (!validate(nameValue, urlValue)) {
