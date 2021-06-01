@@ -106,6 +106,7 @@ function fetchBookmarks() {
 
 // Delete Bookmark
 function deleteBookmark(url) {
+  //Loop through the bookmarks array and delect the one we want to delete
   bookmarks.forEach((bookmark, i) => {
     if (bookmark.url === url) {
       bookmarks.splice(i, 1);
